@@ -133,6 +133,7 @@ public:
     void Blink(uint8_t index, uint8_t value);
     void WriteToSevenSegment(SevenSegment* strptr, ata_SevenSegmentSymbols symbol);
     SevenSegment* GetDigit(uint8_t digit);
+    void WriteGpio(uint8_t gpio, uint8_t state);
     void Scan();
 private:
     void ResetDcons();
@@ -152,7 +153,7 @@ void Led::Scan()
         m_dcons[dcon] = LOW;
         for (size_t segment = 0; segment < SEGMENT_SIZE; segment++)
         {
-            m_segments[segment] = m_digits[dcon].Led[segment].State;
+            WriteGpio(m_segments[segment], m_digits[dcon].Led[segment].State);
         }
     }
 }
@@ -174,6 +175,11 @@ SevenSegment* Led::GetDigit(uint8_t digit)
     if (digit >= 0 && digit < DIGIT_NUMBER)
         return &m_digits[digit];
     return nullptr;
+}
+
+void Led::WriteGpio(uint8_t gpio, uint8_t state)
+{
+
 }
 
 int main()
